@@ -10,16 +10,16 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      - name: Instalar lo básico
-        run: pip install xarray numpy
+      - name: Instalar Herramientas
+        run: |
+          pip install herbie xarray cfgrib numpy eccodes
       - name: Ejecutar
         run: python procesar_viento.py
       - name: Subir
         run: |
           git config --global user.name 'MetCam-Bot'
           git config --global user.email 'bot@metcam.cl'
-          # El comando 'mkdir -p' asegura que la carpeta exista antes de agregar el archivo
           mkdir -p datos
-          git add datos/viento_chile.json
-          git commit -m "Datos listos" || exit 0
+          git add datos/viento_chile.json || echo "No hay cambios"
+          git commit -m "Datos actualizados" || exit 0
           git push
