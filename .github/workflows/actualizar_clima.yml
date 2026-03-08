@@ -18,6 +18,8 @@ jobs:
         run: |
           git config --global user.name 'MetCam-Bot'
           git config --global user.email 'bot@metcam.cl'
+          # El comando 'mkdir -p' asegura que la carpeta exista antes de agregar el archivo
+          mkdir -p datos
           git add datos/viento_chile.json
           git commit -m "Datos listos" || exit 0
           git push
