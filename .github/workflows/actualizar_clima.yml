@@ -1,39 +1,23 @@
 name: Actualizar Datos MetCam
 on:
-  schedule:
-    - cron: '0 */6 * * *'
-  workflow_dispatch:      
-
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout del código
-        uses: actions/checkout@v3
-
-      - name: Instalar dependencias del sistema
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libeccodes-dev
-
+      - uses: actions/checkout@v3
       - name: Configurar Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-
-      - name: Instalar herramientas de clima
-        run: |
-          python -m pip install --upgrade pip
-          pip install herbie xarray cfgrib numpy eccodes
-
-      - name: Ejecutar MetCam
+      - name: Instalar lo básico
+        run: pip install xarray numpy
+      - name: Ejecutar
         run: python procesar_viento.py
-
-      - name: Guardar datos
+      - name: Subir
         run: |
           git config --global user.name 'MetCam-Bot'
           git config --global user.email 'bot@metcam.cl'
-          mkdir -p datos
-          git add datos/viento_chile.json || echo "Sin cambios"
-          git commit -m "Actualización automática" || exit 0
+          git add datos/viento_chile.json
+          git commit -m "Datos listos" || exit 0
           git push
